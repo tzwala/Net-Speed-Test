@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test - Glassmorphism & Animated Background</title>
+    <style>
+        /* --- Keyframes for Content & Background Animations --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Keyframes for the moving background shapes */
+        @keyframes moveShape1 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(10vw, -15vh) rotate(360deg); }
+        }
+
+        @keyframes moveShape2 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-20vw, 20vh) rotate(-300deg); }
+        }
+
+        @keyframes moveShape3 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(15vw, 15vh) rotate(270deg); }
+        }
+
+
+        /* --- General Body & Background Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0d1117; /* Dark background */
+            overflow: hidden; /* Prevent scrollbars from animated shapes */
+            position: relative;
+        }
+
+        /* 1. Container for the animated shapes */
+        .background-shapes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind the content, but on top of the body background */
+        }
+        
+        /* 2. Style for the individual shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            /* The key to the "aurora" effect: a heavy blur */
+            filter: blur(120px);
+            opacity: 0.7;
+        }
+
+        .shape1 {
+            width: 400px;
+            height: 400px;
+            background: #00c6ff;
+            top: -50px;
+            left: -100px;
+            animation: moveShape1 25s infinite alternate ease-in-out;
+        }
+        
+        .shape2 {
+            width: 350px;
+            height: 350px;
+            background: #e040fb;
+            bottom: -80px;
+            right: -120px;
+            animation: moveShape2 30s infinite alternate ease-in-out;
+        }
+
+        .shape3 {
+            width: 250px;
+            height: 250px;
+            background: #4ef0a0;
+            bottom: 20vh;
+            left: 20vw;
+            animation: moveShape3 20s infinite alternate ease-in-out;
+        }
+
+        /* --- Speed Test Widget (Glassmorphism Card) --- */
+        .speed-test-container {
+            position: relative;
+            z-index: 1; /* Ensure the card is on top of the shapes */
+
+            /* 3. The Glassmorphism Effect */
+            background: rgba(20, 25, 40, 0.65); /* Semi-transparent fill */
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.125); /* Subtle border */
+            
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .speed-test-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Staggered fade-in animation for content */
+        .speed-test-header h2,
+        .speed-test-header p,
+        .iframe-aspect-ratio-wrapper {
+            opacity: 0;
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+        .speed-test-header h2 { animation-delay: 0.2s; }
+        .speed-test-header p { animation-delay: 0.4s; }
+        .iframe-aspect-ratio-wrapper { animation-delay: 0.6s; }
+
+        .speed-test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .speed-test-header h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .speed-test-header p {
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Iframe Wrapper */
+        .iframe-aspect-ratio-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            border-radius: 8px;
+            background-color: #000;
+        }
+
+        .iframe-aspect-ratio-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 600px) {
+            body { padding: 1rem 0.5rem; }
+            .speed-test-container { padding: 1.5rem; }
+            .speed-test-header h2 { font-size: 1.5rem; }
+            .shape { filter: blur(80px); } /* Reduce blur intensity on mobile */
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- This container holds the animated shapes for the background -->
+    <div class="background-shapes-container">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <main>
+        <section class="speed-test-container">
+            <div class="speed-test-header">
+                <h2>Check Your Internet Speed</h2>
+                <p>Click the "Start" button below to measure your connection's performance.</p>
+            </div>
+            
+            <div class="iframe-aspect-ratio-wrapper">
+                <iframe 
+                    title="Internet speed test" 
+                    aria-label="Speed Test" 
+                    role="none"
+                    id="iframeSpeedTest" 
+                    src="https://openspeedtest.com/Get-widget.php"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
